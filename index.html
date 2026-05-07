@@ -89,33 +89,40 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    align-items: center;
     justify-content: center;
-    padding: 8rem 3rem 4rem;
+    text-align: center;
+    padding: 6rem 1.5rem 4rem;
     position: relative;
     overflow: hidden;
   }
 
   .hero-bg-line {
     position: absolute;
-    top: 20%;
-    right: -10%;
-    width: 60vw;
-    height: 60vw;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(50vw, 400px);
+    height: min(50vw, 400px);
     border-radius: 50%;
     border: 1px solid var(--border);
     pointer-events: none;
     animation: rotate 40s linear infinite;
+    z-index: 0;
+    opacity: 0.5;
   }
 
   .hero-bg-line::after {
     content: '';
     position: absolute;
-    inset: 15%;
+    inset: 20%;
     border-radius: 50%;
     border: 1px solid var(--border);
   }
 
-  @keyframes rotate { to { transform: rotate(360deg); } }
+  @keyframes rotate { to { transform: translate(-50%, -50%) rotate(360deg); } }
+
+  .hero > * { position: relative; z-index: 1; }
 
   .hero-tag {
     font-family: 'DM Mono', monospace;
@@ -130,7 +137,7 @@
 
   .hero-name {
     font-family: 'DM Serif Display', serif;
-    font-size: clamp(3rem, 7vw, 6rem);
+    font-size: clamp(2.8rem, 8vw, 6rem);
     line-height: 1.05;
     letter-spacing: -0.02em;
     margin-bottom: 1rem;
@@ -145,10 +152,10 @@
 
   .hero-desc {
     max-width: 520px;
-    font-size: 17px;
+    font-size: clamp(15px, 2.5vw, 17px);
     color: var(--muted);
     line-height: 1.7;
-    margin-bottom: 2.5rem;
+    margin: 0 auto 2.5rem;
     opacity: 0;
     animation: fadeUp 0.6s 0.3s forwards;
   }
@@ -159,6 +166,7 @@
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
+    justify-content: center;
     opacity: 0;
     animation: fadeUp 0.6s 0.4s forwards;
   }
@@ -178,11 +186,7 @@
     border: none;
   }
 
-  .btn-primary {
-    background: var(--accent);
-    color: #0d0d0d;
-  }
-
+  .btn-primary { background: var(--accent); color: #0d0d0d; }
   .btn-primary:hover { background: #d4f570; transform: translateY(-1px); }
 
   .btn-ghost {
@@ -190,16 +194,14 @@
     color: var(--text);
     border: 1px solid var(--border);
   }
-
   .btn-ghost:hover { border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.04); }
 
   .hero-stack {
-    position: absolute;
-    bottom: 3rem;
-    left: 3rem;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 1.5rem;
+    gap: 0.75rem;
+    margin-top: 3rem;
     opacity: 0;
     animation: fadeUp 0.6s 0.5s forwards;
   }
@@ -215,6 +217,7 @@
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
+    justify-content: center;
   }
 
   .stack-tag {
@@ -496,13 +499,55 @@
   @media (max-width: 768px) {
     nav { padding: 1rem 1.5rem; }
     .nav-links { display: none; }
-    .hero { padding: 7rem 1.5rem 6rem; }
+    .hero { padding: 5rem 1.5rem 3rem; }
     section { padding: 4rem 1.5rem; }
+    .projects-grid { grid-template-columns: 1fr; }
     .project-card.featured { grid-template-columns: 1fr; }
     .project-visual { display: none; }
     .about-grid { grid-template-columns: 1fr; }
-    .hero-stack { left: 1.5rem; bottom: 2rem; }
-    .contact-row { padding: 2rem; }
+    .about-stats { grid-template-columns: 1fr 1fr; }
+    .contact-row { padding: 2rem; flex-direction: column; }
+    .companies { flex-direction: column; }
+    .hero-stack { margin-top: 2rem; }
+  }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .skill-group {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+  }
+
+  .skill-group-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+
+  .tag {
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: var(--border-radius-md, 6px);
+    background: rgba(255,255,255,0.04);
+    color: var(--muted);
+    border: 1px solid var(--border);
+  }
+
+  .tag.highlight {
+    background: rgba(200,240,96,0.12);
+    color: var(--accent);
+    border-color: rgba(200,240,96,0.3);
   }
 </style>
 </head>
@@ -647,8 +692,14 @@
           <a href="https://gsepcore.com" target="_blank" style="font-family: 'DM Mono', monospace; font-size: 12px; color: var(--accent); text-decoration: none;">gsepcore.com →</a>
         </div>
       </div>
-      <div class="project-visual">
-        <span class="project-visual-text">GSEP™ CORE</span>
+      <div class="project-visual" style="display:flex; flex-direction:column; gap:10px; align-items:center; justify-content:center; padding:1.5rem; min-height:160px;">
+        <div style="font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); text-align:center; line-height:2.2;">
+          <div style="color:var(--accent); font-size:13px; font-weight:500; margin-bottom:10px; letter-spacing:0.08em;">GSEP™ CORE</div>
+          <div>🧬 Cromosomas auto-evolutivos</div>
+          <div>🔐 Firewall C3 · Sistema inmune C4</div>
+          <div>⚡ 22 módulos de seguridad</div>
+          <div style="margin-top:10px; color:rgba(200,240,96,0.4); font-size:10px;">1,931 tests · @gsep/core</div>
+        </div>
       </div>
     </div>
 
@@ -693,6 +744,64 @@
       </div>
     </div>
 
+    <!-- ValidateLab / Idea Explorer Pro -->
+    <div class="project-card featured fade-in" style="--card-accent: var(--purple); margin-top: 1.5rem;">
+      <div>
+        <div class="gsep-badge" style="background: var(--purple-dim); border-color: rgba(167,139,250,0.3); color: var(--purple);"><span class="gsep-dot" style="background: var(--purple);"></span> Agente autónomo en producción</div>
+        <p class="project-label">SaaS · Agente IA · Growth Automation</p>
+        <h3 class="project-name">ValidateLab</h3>
+        <p class="project-desc">
+          Plataforma de automatización de ventas y validación de ideas de negocio impulsada por <strong style="color:var(--text)">Jarvis</strong> — un agente autónomo con ReAct loop corriendo en VPS con Playwright. Jarvis prospecta leads via Google Maps, enriquece contactos, ejecuta campañas de email drip, monitorea competidores, analiza anuncios de Meta, genera reportes PDF, y orquesta playbooks completos de ventas. 30+ tools, 9 playbooks automatizados, monitor en vivo con Supabase Realtime, agentes de voz con Retell + SIP, y avatar de video con HeyGen WebRTC.
+        </p>
+        <div class="project-tech">
+          <span class="tech-pill">React + Vite</span>
+          <span class="tech-pill">TypeScript</span>
+          <span class="tech-pill">Supabase</span>
+          <span class="tech-pill">Anthropic Claude</span>
+          <span class="tech-pill">Playwright</span>
+          <span class="tech-pill">Docker</span>
+          <span class="tech-pill">Node.js</span>
+          <span class="tech-pill">Gemini Flash</span>
+          <span class="tech-pill">HeyGen</span>
+          <span class="tech-pill">Retell AI</span>
+        </div>
+        <div style="margin-top: 1rem;">
+          <a href="https://github.com/LuisvelMarketer/idea-explorer-pro" target="_blank" style="font-family: 'DM Mono', monospace; font-size: 12px; color: var(--purple); text-decoration: none;">github.com/LuisvelMarketer/idea-explorer-pro →</a>
+        </div>
+      </div>
+      <div class="project-visual" style="display:flex; flex-direction: column; gap: 10px; align-items: center; justify-content: center; padding: 1.5rem;">
+        <div style="font-family:'DM Mono',monospace; font-size:10px; color: var(--muted); text-align:center; line-height:2.2;">
+          <div style="color:var(--purple); font-size:11px; margin-bottom:8px;">JARVIS AGENT</div>
+          <div>🔍 Prospecting &nbsp;→&nbsp; 📧 Email drip</div>
+          <div>📊 Competitor spy &nbsp;→&nbsp; 🎙 Voice agents</div>
+          <div style="margin-top:8px; color: rgba(255,255,255,0.2);">30+ tools · 9 playbooks · Realtime</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sentinel Core -->
+    <div class="project-card fade-in" style="--card-accent: #f87171;">
+      <span class="project-arrow">↗</span>
+      <p class="project-label">Ciberseguridad · Pentesting · SaaS</p>
+      <h3 class="project-name">Sentinel Core</h3>
+      <p class="project-desc">
+        Plataforma de ciberseguridad y pentesting con interfaz profesional. Dashboard con métricas de seguridad en tiempo real, generación de reportes PDF, visualización de vulnerabilidades con Recharts, y automatización de pruebas con Playwright. Diseñada para equipos de seguridad ofensiva y defensiva.
+      </p>
+      <div class="project-tech">
+        <span class="tech-pill">React 18</span>
+        <span class="tech-pill">TypeScript</span>
+        <span class="tech-pill">Supabase</span>
+        <span class="tech-pill">Playwright</span>
+        <span class="tech-pill">Recharts</span>
+        <span class="tech-pill">jsPDF</span>
+        <span class="tech-pill">Framer Motion</span>
+        <span class="tech-pill">shadcn/ui</span>
+      </div>
+      <div style="margin-top: 1rem;">
+        <a href="https://github.com/LuisvelMarketer/sentinel-core-app" target="_blank" style="font-family: 'DM Mono', monospace; font-size: 12px; color: #f87171; text-decoration: none;">github.com/LuisvelMarketer/sentinel-core-app →</a>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -721,12 +830,12 @@
 
     <div class="about-stats fade-in">
       <div class="stat-card">
-        <div class="stat-num">3–4</div>
-        <div class="stat-label">años con React / Next.js en producción</div>
+        <div class="stat-num">37+</div>
+        <div class="stat-label">softwares construidos para empresas</div>
       </div>
       <div class="stat-card">
-        <div class="stat-num">6</div>
-        <div class="stat-label">proyectos activos en producción</div>
+        <div class="stat-num">6+</div>
+        <div class="stat-label">años de experiencia full-stack</div>
       </div>
       <div class="stat-card">
         <div class="stat-num">2</div>
@@ -740,18 +849,64 @@
   </div>
 </section>
 
+<!-- Skills -->
+<section id="skills">
+  <div class="section-header fade-in">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Habilidades</h2>
+  </div>
+  <div class="skills-grid fade-in">
+    <div class="skill-group">
+      <div class="skill-group-label">Lenguajes</div>
+      <div class="tags">
+        <span class="tag">Python</span><span class="tag">TypeScript</span><span class="tag">JavaScript</span><span class="tag">Rust</span><span class="tag">C++</span><span class="tag">SQL</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-label">Frontend</div>
+      <div class="tags">
+        <span class="tag">React 19</span><span class="tag">Next.js 15</span><span class="tag">Tailwind CSS</span><span class="tag">shadcn/ui</span><span class="tag">Framer Motion</span><span class="tag">Figma</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-label">Backend & APIs</div>
+      <div class="tags">
+        <span class="tag">Django 5</span><span class="tag">FastAPI</span><span class="tag">Node.js</span><span class="tag">PostgreSQL</span><span class="tag">REST</span><span class="tag">GraphQL</span><span class="tag">Celery</span><span class="tag">Redis</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-label">IA & LLMs</div>
+      <div class="tags">
+        <span class="tag highlight">GSEP&#x2122;</span><span class="tag">Anthropic API</span><span class="tag">OpenAI API</span><span class="tag">Cohere</span><span class="tag">Voyage AI</span><span class="tag">LangChain</span><span class="tag">RAG</span><span class="tag">MCP Protocol</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-label">Cloud & DevOps</div>
+      <div class="tags">
+        <span class="tag">Cloudflare Workers</span><span class="tag">D1 / R2 / KV</span><span class="tag">AWS S3</span><span class="tag">Railway</span><span class="tag">Docker</span><span class="tag">GitHub Actions</span><span class="tag">Supabase</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-label">Idiomas</div>
+      <div class="tags">
+        <span class="tag">Español (nativo)</span><span class="tag">Portugués (C2)</span><span class="tag">Inglés (en progreso)</span>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- Contact -->
 <section id="contacto">
   <div class="contact-row fade-in">
     <div>
-      <p style="font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); margin-bottom: 0.75rem; letter-spacing: 0.08em;">03 — CONTACTO</p>
+      <p style="font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); margin-bottom: 0.75rem; letter-spacing: 0.08em;">04 — CONTACTO</p>
       <h2 class="contact-text">¿Hablamos?<br><em>Construyamos algo.</em></h2>
     </div>
     <div class="contact-links">
       <a href="https://gsepcore.com" target="_blank" class="btn btn-ghost">gsepcore.com</a>
       <a href="https://github.com/LuisvelMarketer" target="_blank" class="btn btn-ghost">GitHub</a>
-      <a href="https://linkedin.com" target="_blank" class="btn btn-ghost">LinkedIn</a>
-      <a href="mailto:luis@velatix.ai" class="btn btn-primary">Escribir →</a>
+      <a href="https://linkedin.com/in/luisvelasquezai" target="_blank" class="btn btn-ghost">LinkedIn</a>
+      <a href="https://wa.me/34659053340" target="_blank" class="btn btn-primary">Escribir →</a>
     </div>
   </div>
 </section>
